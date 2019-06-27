@@ -46,10 +46,10 @@ class CouponRepository extends AbstractRepository
      */
     public function findActiveCoupon($couponCd)
     {
-        $currenDateTime = new \DateTime();
+        $currentDateTime = new \DateTime();
 
         // 時分秒を0に設定する
-        $currenDateTime->setTime(0, 0, 0);
+        $currentDateTime->setTime(0, 0, 0);
 
         $qb = $this->createQueryBuilder('c')->setMaxResults(1)->select('c')->Where('c.visible = true');
 
@@ -63,11 +63,11 @@ class CouponRepository extends AbstractRepository
 
         // 有効期間(FROM)
         $qb->andWhere('c.available_from_date <= :cur_date_time OR c.available_from_date IS NULL')
-            ->setParameter('cur_date_time', $currenDateTime);
+            ->setParameter('cur_date_time', $currentDateTime);
 
         // 有効期間(TO)
         $qb->andWhere(':cur_date_time <= c.available_to_date OR c.available_to_date IS NULL')
-            ->setParameter('cur_date_time', $currenDateTime);
+            ->setParameter('cur_date_time', $currentDateTime);
 
         // 実行
         $result = null;
@@ -86,10 +86,10 @@ class CouponRepository extends AbstractRepository
      */
     public function findActiveCouponAll()
     {
-        $currenDateTime = new \DateTime();
+        $currentDateTime = new \DateTime();
 
         // 時分秒を0に設定する
-        $currenDateTime->setTime(0, 0, 0);
+        $currentDateTime->setTime(0, 0, 0);
 
         $qb = $this->createQueryBuilder('c')->select('c')->Where('c.visible = true');
 
@@ -99,11 +99,11 @@ class CouponRepository extends AbstractRepository
 
         // 有効期間(FROM)
         $qb->andWhere('c.available_from_date <= :cur_date_time OR c.available_from_date IS NULL')
-            ->setParameter('cur_date_time', $currenDateTime);
+            ->setParameter('cur_date_time', $currentDateTime);
 
         // 有効期間(TO)
         $qb->andWhere(':cur_date_time <= c.available_to_date OR c.available_to_date IS NULL')
-            ->setParameter('cur_date_time', $currenDateTime);
+            ->setParameter('cur_date_time', $currentDateTime);
 
         // 実行
         return $qb->getQuery()->getResult();
