@@ -68,9 +68,11 @@ class CouponCouponRepositoryTest extends EccubeTestCase
     {
         /** @var Coupon $Coupon */
         $Coupon = $this->getCoupon();
-
-        $this->actual = $this->couponRepository->enableCoupon($Coupon);
-        $this->expected = true;
+        $couponCd = $Coupon->getCouponCd();
+        $this->couponRepository->enableCoupon($Coupon);
+        $ClassCoupon = $this->couponRepository->findOneBy(['coupon_cd' => $couponCd]);
+        $this->actual = $ClassCoupon->getEnableFlag($Coupon->getCouponCd());
+        $this->expected = false;
         $this->verify();
     }
 
@@ -81,12 +83,23 @@ class CouponCouponRepositoryTest extends EccubeTestCase
     {
         /** @var Coupon $Coupon */
         $Coupon = $this->getCoupon();
-
-        $this->actual = $this->couponRepository->deleteCoupon($Coupon);
-        $this->expected = true;
+        $couponCd = $Coupon->getCouponCd();
+        $this->couponRepository->deleteCoupon($Coupon);
+        $ClassCoupon = $this->couponRepository->findOneBy(['coupon_cd' => $couponCd]);
+        $this->actual = $ClassCoupon->isVisible();
+        $this->expected = false;
         $this->verify();
+        $couponDetails = $ClassCoupon->getCouponDetails();
+        foreach ($couponDetails as $detail) {
+            $this->actual = $detail->isVisible();
+            $this->expected = false;
+            $this->verify();
+        }
     }
 
+    /**
+     * testCheckCouponUseTime.
+     */
     public function testCheckCouponUseTime()
     {
         $Coupon = $this->getCoupon();
